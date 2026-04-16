@@ -95,12 +95,70 @@ $v_2$, y $v_1^\perp$ es normal (perpendicular) a $v_2$.
 Inserte a continuación una captura de pantalla que muestre el resultado de ejecutar el
 fichero `algebra/vectores.py` con la opción *verbosa*, de manera que se muestre el
 resultado de la ejecución de los tests unitarios.
+<img width="702" height="854" alt="image" src="https://github.com/user-attachments/assets/09e389b4-c766-4d7b-9ccd-1cdf2008f473" />
+
 
 #### Código desarrollado
 
 Inserte a continuación el código de los métodos desarrollados en esta tarea, usando los
 comandos necesarios para que se realice el realce sintáctico en Python del mismo (no
 vale insertar una imagen o una captura de pantalla, debe hacerse en formato *markdown*).
+
+```python
+def __mul__(self, other):
+    """
+    Producto de Hadamard (vector * vector) o multiplicación por escalar (vector * número).
+
+    Args:
+        other: Vector o número escalar.
+
+    Returns:
+        Vector resultado.
+    """
+    if isinstance(other, Vector):
+        return Vector([a * b for a, b in zip(self.componentes, other.componentes)])
+    return Vector([a * other for a in self.componentes])
+
+def __rmul__(self, other):
+    """Permite escalar * vector."""
+    return self.__mul__(other)
+
+def __matmul__(self, other):
+    """
+    Producto escalar de dos vectores.
+
+    Args:
+        other (Vector): Otro vector.
+
+    Returns:
+        float: Producto escalar.
+    """
+    return sum(a * b for a, b in zip(self.componentes, other.componentes))
+
+def __floordiv__(self, other):
+    """
+    Componente de self paralela a other.
+
+    Args:
+        other (Vector): Vector de referencia.
+
+    Returns:
+        Vector: Componente tangencial.
+    """
+    return ((self @ other) / (other @ other)) * other
+
+def __mod__(self, other):
+    """
+    Componente de self perpendicular a other.
+
+    Args:
+        other (Vector): Vector de referencia.
+
+    Returns:
+        Vector: Componente normal.
+    """
+    return Vector([a - b for a, b in zip(self.componentes, (self // other).componentes)])
+```
 
 #### Subida del resultado al repositorio GitHub y *pull-request*
 
